@@ -1,0 +1,23 @@
+/* Minimal styles to make app presentable */
+:root{
+  --bg:#f6f8fb;
+  --panel:#ffffff;
+  --text:#0b2545;
+  --muted:#6b7a90;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.app-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--panel);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
+.app-body{display:flex}
+.sidebar{width:220px;background:var(--panel);padding:16px;border-right:1px solid #e6eef7;min-height:calc(100vh - 64px)}
+.content{flex:1;padding:20px}
+.subject-card{border:1px solid #e8eef7;padding:12px;border-radius:6px;background:var(--panel);margin-bottom:8px}
+.question-card{border:1px solid #e8eef7;padding:12px;margin-bottom:12px}
+.options button{display:block;margin:6px 0;padding:8px}
+.pdf-card{border:1px solid #e8eef7;padding:12px;margin:8px;border-radius:6px}
+.practice .q-box{padding:12px;border:1px solid #e8eef7;margin:12px 0}
+
+@media(max-width:800px){
+  .sidebar{display:none}
+}

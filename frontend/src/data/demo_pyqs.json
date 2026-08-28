@@ -1,0 +1,38 @@
+[
+  {
+    "id":"PHY-2024-001",
+    "exam":"JEE Main",
+    "year":2024,
+    "subject":"Physics",
+    "chapter":"Kinematics",
+    "topic":"Relative Motion",
+    "question":"A particle moves in a straight line with constant acceleration. If its velocity doubles in time t, what is the relation between initial and final displacements?",
+    "options":["Final displacement = 2 * initial displacement","Final displacement = 4 * initial displacement","Final displacement = 3 * initial displacement","Final displacement = 1.5 * initial displacement"],
+    "answer":1,
+    "solution":"Using s = ut + 1/2 at^2 and v = u + at, eliminate a to find relation; leads to factor 4.",
+    "difficulty":"Medium",
+    "questionType":"MCQ",
+    "source":"Official JEE Main (example)",
+    "sourceUrl":"https://jeemain.nta.nic.in/",
+    "officialQuestion":false,
+    "officialSolution":false
+  },
+  {
+    "id":"CHEM-DEMO-001",
+    "exam":"Demo",
+    "year":2022,
+    "subject":"Chemistry",
+    "chapter":"Physical Chemistry",
+    "topic":"Mole Concept",
+    "question":"How many moles are there in 18 g of water?",
+    "options":["1","0.5","2","0.1"],
+    "answer":0,
+    "solution":"Molecular weight of water = 18 g/mol, so 18 g = 1 mol.",
+    "difficulty":"Easy",
+    "questionType":"MCQ",
+    "source":"Demo data",
+    "sourceUrl":"",
+    "officialQuestion":false,
+    "officialSolution":false
+  }
+]
