@@ -1,14 +1,16 @@
 import React from 'react'
+import DarkModeToggle from './DarkModeToggle'
 
-export default function Header({onNavigate}){
+export default function Header(){
   return (
-    <header className="app-header">
-      <div className="logo">Rays — JEE Prep (Demo)</div>
-      <div className="header-actions">
-        <button onClick={()=>onNavigate('home')}>Home</button>
-        <button onClick={()=>onNavigate('subjects')}>Subjects</button>
-        <button onClick={()=>onNavigate('pyqs')}>PYQs</button>
-        <button onClick={()=>onNavigate('pdfs')}>PDFs</button>
+    <header className="header">
+      <div style={{display:'flex',alignItems:'center',gap:12}}>
+        <strong>Rays</strong>
+        <input placeholder="Search..." onFocus={()=> window.location.hash='pyqs'} />
+      </div>
+      <div style={{display:'flex',alignItems:'center',gap:12}}>
+        <DarkModeToggle />
+        <div>Profile</div>
       </div>
     </header>
   )

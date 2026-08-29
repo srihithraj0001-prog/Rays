@@ -1,32 +1,26 @@
 {
-  "Physics": [
-    "Units & Measurements",
-    "Kinematics",
-    "Laws of Motion",
-    "Work, Energy & Power",
-    "System of Particles",
-    "Rotational Motion",
-    "Gravitation",
-    "Properties of Matter",
-    "Thermodynamics",
-    "Oscillations",
-    "Waves",
-    "Electrostatics",
-    "Current Electricity",
-    "Magnetism",
-    "EMI & AC",
-    "Optics",
-    "Modern Physics"
-  ],
-  "Chemistry": [
-    "Physical Chemistry",
-    "Inorganic Chemistry",
-    "Organic Chemistry"
-  ],
-  "Mathematics": [
-    "Algebra",
-    "Trigonometry",
-    "Calculus",
-    "Vectors & 3D"
-  ]
+  "title": "JEE Syllabus",
+  "subjects": {
+    "Physics": [
+      "Units & Measurements",
+      "Kinematics",
+      "Laws of Motion",
+      "Work, Energy & Power",
+      "System of Particles",
+      "Rotational Motion",
+      "Gravitation",
+      "Properties of Matter",
+      "Thermodynamics",
+      "Oscillations",
+      "Waves",
+      "Electrostatics",
+      "Current Electricity",
+      "Magnetism",
+      "EMI & AC",
+      "Optics",
+      "Modern Physics"
+    ],
+    "Chemistry": ["Physical Chemistry","Inorganic Chemistry","Organic Chemistry"],
+    "Mathematics": ["Algebra","Calculus","Coordinate Geometry","Trigonometry","Vectors & 3D"]
+  }
 }

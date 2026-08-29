@@ -1,13 +1,13 @@
 [
   {
-    "title":"Sample Mechanics Notes",
-    "subject":"Physics",
-    "chapter":"Kinematics",
-    "type":"notes",
-    "source":"Public Demo",
-    "sourceUrl":"https://www.w3.org/",
-    "year":"2020",
-    "license":"public-domain",
-    "file":"https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    "title": "Sample Legal PDF",
+    "subject": "Physics",
+    "chapter": "Kinematics",
+    "type": "theory",
+    "source": "Sample",
+    "sourceUrl": "",
+    "year": "2024",
+    "license": "CC0",
+    "file": "/public/sample-legal.pdf"
   }
 ]

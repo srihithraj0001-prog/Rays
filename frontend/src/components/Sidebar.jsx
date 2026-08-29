@@ -1,17 +1,19 @@
 import React from 'react'
 
-export default function Sidebar({onNavigate}){
+export default function Sidebar({route}){
+  const links = [
+    ['dashboard','Dashboard'],
+    ['pyqs','PYQs'],
+    ['pdfs','PDFs'],
+    ['practice','Practice'],
+    ['about','About']
+  ]
   return (
     <aside className="sidebar">
-      <nav>
-        <ul>
-          <li onClick={()=>onNavigate('home')}>Dashboard</li>
-          <li onClick={()=>onNavigate('subjects')}>Subjects</li>
-          <li onClick={()=>onNavigate('pyqs')}>PYQs</li>
-          <li onClick={()=>onNavigate('pdfs')}>PDF Library</li>
-          <li onClick={()=>onNavigate('practice')}>Practice</li>
-        </ul>
-      </nav>
+      <div style={{marginBottom:16}}><strong>Rays</strong></div>
+      {links.map(l=> (
+        <a key={l[0]} className={"navlink "+(route===l[0]? 'active':'')} href={'#'+l[0]}>{l[1]}</a>
+      ))}
     </aside>
   )
 }

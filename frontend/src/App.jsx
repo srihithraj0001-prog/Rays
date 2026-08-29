@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import Dashboard from './components/Dashboard'
-import SubjectsList from './components/SubjectsList'
 import PYQBrowser from './components/PYQBrowser'
 import PDFsPage from './components/PDFsPage'
 import PracticeInterface from './components/PracticeInterface'
-import { loadSyllabus } from './data/syllabus'
+import { loadDemoData } from './utils/storage'
 
 export default function App(){
-  const [page, setPage] = useState('home')
-  const [selectedSubject, setSelectedSubject] = useState(null)
-  const syllabus = loadSyllabus()
-
+  const [route, setRoute] = useState(window.location.hash.replace('#','') || 'dashboard')
   useEffect(()=>{
-    document.title = 'Rays — JEE Prep'
+    const onHash = ()=> setRoute(window.location.hash.replace('#','') || 'dashboard')
+    window.addEventListener('hashchange', onHash)
+    return ()=> window.removeEventListener('hashchange', onHash)
   },[])
 
+  useEffect(()=>{ loadDemoData() }, [])
+
   return (
-    <div className="app-root">
-      <Header onNavigate={setPage} />
-      <div className="app-body">
-        <Sidebar onNavigate={setPage} />
+    <div className="app">
+      <Header />
+      <div className="layout">
+        <Sidebar route={route} setRoute={setRoute} />
         <main className="content">
-          {page==='home' && <Dashboard onOpenSubject={(sub)=>{setSelectedSubject(sub); setPage('subjects')}} />}
-          {page==='subjects' && <SubjectsList syllabus={syllabus} onOpenChapter={()=>setPage('chapter')} />}
-          {page==='pyqs' && <PYQBrowser onStartPractice={()=>setPage('practice')} />}
-          {page==='pdfs' && <PDFsPage />}
-          {page==='practice' && <PracticeInterface />}
-          {/* Simple admin/demo page could go here */}
+          {route === 'dashboard' && <Dashboard />}
+          {route === 'pyqs' && <PYQBrowser />}
+          {route === 'pdfs' && <PDFsPage />}
+          {route.startsWith('practice') && <PracticeInterface />}
+          {route === 'about' && <div style={{padding:20}}>About / Admin demo</div>}
         </main>
       </div>
     </div>
