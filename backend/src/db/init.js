@@ -1,6 +1,9 @@
 const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 const fs = require('fs')
+const bcrypt = require('bcryptjs')
+const { v4: uuidv4 } = require('uuid')
+require('dotenv').config()
 
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'data', 'rays.db')
 const DIR = path.dirname(DB_PATH)
@@ -12,8 +15,22 @@ function run(sql){
   return new Promise((res, rej)=> db.run(sql, function(err){ if(err) rej(err); else res(this) }))
 }
 
+function get(sql, params=[]){
+  return new Promise((res, rej)=> db.get(sql, params, (err,row)=> err?rej(err):res(row)))
+}
+
 async function init(){
-  // basic schema
+  // schema
+  await run(`CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    email TEXT UNIQUE,
+    password_hash TEXT,
+    role TEXT DEFAULT 'student',
+    created_at INTEGER,
+    updated_at INTEGER
+  )`)
+
   await run(`CREATE TABLE IF NOT EXISTS questions (
     id TEXT PRIMARY KEY,
     exam TEXT,
@@ -81,7 +98,40 @@ async function init(){
     created_at INTEGER
   )`)
 
+  // create sessions table will be managed by connect-sqlite3 automatically when session store initialized
+
   console.log('Database initialized at', DB_PATH)
+
+  // Admin bootstrap: if ADMIN_EMAIL set and no user exists with that email, create one
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPass = process.env.ADMIN_PASSWORD
+  const adminName = process.env.ADMIN_NAME || 'Admin'
+  if(adminEmail && adminPass){
+    const existing = await get(`SELECT id FROM users WHERE email = ?`, [adminEmail])
+    if(!existing){
+      const id = uuidv4()
+      const hash = bcrypt.hashSync(adminPass, 10)
+      await run(`INSERT INTO users (id,name,email,password_hash,role,created_at,updated_at) VALUES (?,?,?,?,?,?,?)`, [id, adminName, adminEmail, hash, 'admin', Date.now(), Date.now()])
+      console.log('Admin user created:', adminEmail)
+    } else {
+      console.log('Admin user already exists:', adminEmail)
+    }
+  }
+
+  // Migrate legacy demo-user: if any bookmarks or attempts reference DEMO_LEGACY_ID, ensure a users row exists with that id
+  const legacyId = process.env.DEMO_LEGACY_ID || 'demo-user'
+  const demoReferences = await get(`SELECT COUNT(*) as c FROM bookmarks WHERE user_id = ?`, [legacyId])
+  const demoAttempts = await get(`SELECT COUNT(*) as c FROM question_attempts WHERE user_id = ?`, [legacyId])
+  if((demoReferences && demoReferences.c > 0) || (demoAttempts && demoAttempts.c > 0)){
+    const u = await get(`SELECT id FROM users WHERE id = ?`, [legacyId])
+    if(!u){
+      // create a seeding demo user with that id so existing rows map to a real user
+      const demoEmail = `demo+legacy@localhost`
+      await run(`INSERT INTO users (id,name,email,password_hash,role,created_at,updated_at) VALUES (?,?,?,?,?,?,?)`, [legacyId, 'Legacy Demo', demoEmail, null, 'student', Date.now(), Date.now()])
+      console.log('Legacy demo user created with id', legacyId)
+    }
+  }
+
   db.close()
 }
 

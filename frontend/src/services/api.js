@@ -1,8 +1,8 @@
-// frontend API wrapper
+// update api request to include credentials and proper base
 const BASE = import.meta.env.VITE_API_URL || (location.origin + '/api')
 
 async function request(path, {method='GET', body, headers={}} = {}){
-  const opts = { method, headers: {...headers} }
+  const opts = { method, headers: {...headers}, credentials: 'include' }
   if(body && typeof body === 'object' && !(body instanceof FormData)){
     opts.body = JSON.stringify(body)
     opts.headers['Content-Type'] = 'application/json'
