@@ -1,0 +1,21 @@
+[
+  {
+    "id": "PYQ-EXT-2020-001",
+    "exam": "JEE Main",
+    "year": 2020,
+    "session": "Jan",
+    "subject": "Physics",
+    "chapter": "Kinematics",
+    "topic": "Relative Motion",
+    "question": "A car travels at 36 km/h. What is its speed in m/s?",
+    "options": ["10 m/s","5 m/s","20 m/s","12 m/s"],
+    "answer": "10 m/s",
+    "solution": "36 km/h = 36 * (1000/3600) = 10 m/s",
+    "difficulty": "Easy",
+    "questionType": "MCQ",
+    "source": "Official Archive",
+    "sourceUrl": "",
+    "officialQuestion": true,
+    "officialSolution": false
+  }
+]
