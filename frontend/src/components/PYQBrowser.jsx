@@ -1,44 +1,53 @@
 import React, {useEffect, useState} from 'react'
-import demo from '../data/demo_pyqs.json'
+import { getQuestions } from '../services/questions'
+import QuestionCard from './QuestionCard'
 
 export default function PYQBrowser(){
-  const [qset, setQset] = useState([])
-  const [filter, setFilter] = useState({subject:'',chapter:'',difficulty:''})
-  useEffect(()=> setQset(demo),[])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [qs, setQs] = useState([])
+  const [page, setPage] = useState(1)
+  const [filters, setFilters] = useState({})
 
-  const filtered = qset.filter(q=>{
-    if(filter.subject && q.subject !== filter.subject) return false
-    if(filter.chapter && q.chapter !== filter.chapter) return false
-    if(filter.difficulty && q.difficulty !== filter.difficulty) return false
-    return true
-  })
+  useEffect(()=>{ fetchPage(1) }, [])
+
+  async function fetchPage(p){
+    setLoading(true); setError(null)
+    try{
+      const res = await getQuestions({...filters, page:p, limit:20})
+      setQs(res.data || [])
+      setPage(p)
+    }catch(e){ setError(e); console.error(e) }
+    finally{ setLoading(false) }
+  }
+
   return (
     <div>
       <h2>PYQ Browser</h2>
       <div style={{display:'flex',gap:12,marginBottom:12}}>
-        <select onChange={e=> setFilter({...filter,subject:e.target.value})}>
+        <select onChange={e=> setFilters({...filters,subject:e.target.value})}>
           <option value="">All Subjects</option>
           <option>Physics</option>
           <option>Chemistry</option>
           <option>Mathematics</option>
         </select>
-        <select onChange={e=> setFilter({...filter,difficulty:e.target.value})}>
+        <select onChange={e=> setFilters({...filters,difficulty:e.target.value})}>
           <option value="">All Difficulties</option>
           <option>Easy</option>
           <option>Medium</option>
           <option>Hard</option>
         </select>
+        <button onClick={()=> fetchPage(1)}>Apply</button>
       </div>
-      {filtered.map(q=> (
-        <div key={q.id} className="question-card">
-          <div><strong>{q.subject} — {q.chapter}</strong></div>
-          <div style={{marginTop:8}}>{q.question}</div>
-          <div style={{marginTop:8,display:'flex',gap:8}}>
-            {q.options.map((o,i)=> <div key={i} style={{padding:'6px 10px',border:'1px solid rgba(0,0,0,0.06)',borderRadius:6}}>{o}</div>)}
-          </div>
-          <div style={{marginTop:8,fontSize:13,color:'var(--muted)'}}>Source: {q.source || 'Unknown'}</div>
-        </div>
-      ))}
+      {loading && <div>Loading questions...</div>}
+      {error && <div>Error loading questions <button onClick={()=> fetchPage(page)}>Retry</button></div>}
+      {!loading && !error && qs.length === 0 && <div>No questions found</div>}
+      {qs.map(q=> <QuestionCard key={q.id} q={q} />)}
+      <div style={{marginTop:12}}>
+        <button onClick={()=> fetchPage(Math.max(1,page-1))}>Previous</button>
+        <span style={{margin:'0 8px'}}>Page {page}</span>
+        <button onClick={()=> fetchPage(page+1)}>Next</button>
+      </div>
     </div>
   )
 }

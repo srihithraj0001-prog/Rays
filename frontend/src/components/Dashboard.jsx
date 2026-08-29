@@ -1,22 +1,37 @@
-import React from 'react'
-import { getProgress } from '../utils/storage'
+import React, {useEffect, useState} from 'react'
+import { getProgress, getSubjectAnalytics } from '../services/progress'
 
 export default function Dashboard(){
-  const progress = getProgress()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [subjects, setSubjects] = useState([])
+
+  useEffect(()=>{ fetchData() }, [])
+  async function fetchData(){
+    setLoading(true); setError(null)
+    try{
+      const subjectRes = await getSubjectAnalytics()
+      setSubjects(subjectRes.data || [])
+    }catch(err){
+      setError(err); console.error(err)
+    }finally{ setLoading(false) }
+  }
+
+  if(loading) return <div>Loading dashboard...</div>
+  if(error) return <div>Error loading dashboard <button onClick={fetchData}>Retry</button></div>
+
   return (
     <div>
       <h2>Good evening, Student</h2>
       <div className="card">
-        <h3>Today's Progress</h3>
-        <div style={{display:'flex',gap:12}}>
-          <div>Physics <strong>{progress.Physics||0}%</strong></div>
-          <div>Chemistry <strong>{progress.Chemistry||0}%</strong></div>
-          <div>Mathematics <strong>{progress.Mathematics||0}%</strong></div>
-        </div>
-      </div>
-      <div className="card">
-        <h3>Continue Learning</h3>
-        <div>Physics → Rotational Motion</div>
+        <h3>Subject performance</h3>
+        {subjects.length === 0 ? <div>No activity yet</div> : (
+          <ul>
+            {subjects.map(s=> (
+              <li key={s.subject}>{s.subject} — Accuracy: {s.accuracy || 0}% ({s.attempts} attempts)</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )
